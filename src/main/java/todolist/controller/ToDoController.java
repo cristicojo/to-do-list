@@ -22,28 +22,28 @@ public class ToDoController {
     }
 
     @GetMapping("/todo/{id}")
-    public ToDo getPersonById(@PathVariable(name="id") Integer id) {
+    public ToDo getToDoById(@PathVariable(name="id") Integer id) {
         return service.findOne(id);
     }
 
     @PostMapping("/todo")
-    public ToDo savePerson(@RequestBody ToDo p) {
+    public ToDo saveToDo(@RequestBody ToDo p) {
         return service.create(p);
     }
 
     @PutMapping("/todo/{id}")
-    public ToDo update(@PathVariable(name="id") Integer id, @RequestBody ToDo p) {
+    public ToDo updateToDo(@PathVariable(name="id") Integer id, @RequestBody ToDo p) {
         return service.update(p, id);
     }
 
     @DeleteMapping("/todo/{id}")
-    public void deleteById(@PathVariable(name="id") Integer id) {
+    public void deleteToDoById(@PathVariable(name="id") Integer id) {
         service.delete(id);
 
     }
 
     @DeleteMapping("/all")
-    public void deleteAllPersons() {
+    public void deleteAllToDo() {
         service.deleteAll();
     }
 
