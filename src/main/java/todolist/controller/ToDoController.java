@@ -1,19 +1,20 @@
 package todolist.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import todolist.entity.ToDo;
-import todolist.service.impl.ToDoServiceImpl;
+import todolist.service.ToDoService;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping(name="/api")
+@RequestMapping("/api")
+@AllArgsConstructor
 public class ToDoController {
 
-    @Autowired
-    private ToDoServiceImpl service;
+    private ToDoService service;
 
 
     @GetMapping("/all")
@@ -22,44 +23,49 @@ public class ToDoController {
     }
 
     @GetMapping("/todo/{id}")
-    public ToDo getToDoById(@PathVariable(name="id") Integer id) {
+    public ToDo getById(@PathVariable("id") Integer id) {
         return service.findOne(id);
     }
 
     @PostMapping("/todo")
-    public ToDo saveToDo(@RequestBody ToDo p) {
-        return service.create(p);
+    public ToDo save(@Valid @RequestBody ToDo toDo) {
+        return service.create(toDo);
     }
 
     @PutMapping("/todo/{id}")
-    public ToDo updateToDo(@PathVariable(name="id") Integer id, @RequestBody ToDo p) {
-        return service.update(p, id);
+    public ToDo update(@PathVariable("id") Integer id, @RequestBody ToDo toDo) {
+        return service.update(toDo, id);
     }
 
     @DeleteMapping("/todo/{id}")
-    public void deleteToDoById(@PathVariable(name="id") Integer id) {
+    public void deleteById(@PathVariable("id") Integer id) {
         service.delete(id);
 
     }
 
     @DeleteMapping("/all")
-    public void deleteAllToDo() {
+    public void deleteAll() {
         service.deleteAll();
     }
 
 
-    @PatchMapping("/todo/{id}/{title}")
-    public ToDo updateTitle(@PathVariable Integer id, @PathVariable String title) {
-        return service.partialUpdate(id, title);
+    @PatchMapping("/status/{id}")
+    public ToDo updateStatus(@PathVariable Integer id, @RequestParam("status") String requestParam, HttpServletRequest request) {
+        return service.partialUpdate(id, requestParam, request);
     }
 
-    @PatchMapping("/todo/{id}/{dueDate}")
-    public ToDo updateDueDate(@PathVariable Integer id, @PathVariable LocalDateTime dueDate) {
-        return service.partialUpdate(id, String.valueOf(dueDate));
+    @PatchMapping("/description/{id}")
+    public ToDo updateDescription(@PathVariable Integer id, @RequestParam("description") String requestParam, HttpServletRequest request) {
+        return service.partialUpdate(id, requestParam, request);
     }
 
-    @PatchMapping("/todo/{id}/{status}")
-    public ToDo updateStatus(@PathVariable Integer id, @PathVariable String status) {
-        return service.partialUpdate(id, status);
+    @PatchMapping("/dueDate/{id}")
+    public ToDo updateDueDate(@PathVariable Integer id, @RequestParam("dueDate") String requestParam, HttpServletRequest request) {
+        return service.partialUpdate(id, requestParam, request);
+    }
+
+    @PatchMapping("/title/{id}")
+    public ToDo updateTitle(@PathVariable Integer id, @RequestParam("title") String requestParam, HttpServletRequest request) {
+        return service.partialUpdate(id, requestParam, request);
     }
 }

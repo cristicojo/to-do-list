@@ -1,11 +1,13 @@
 package todolist.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -21,12 +23,19 @@ public class ToDo {
 
 
     @Column(name="Title")
+    @NotNull
     private String title;
 
+    @Column(name="Description")
+    private String description;
+
     @Column(name="Due_date")
-    private LocalDateTime dueDate;
+    @NotNull
+    private LocalDate dueDate;
 
     @Column(name="Status")
+    @Pattern(regexp = "To Do|In Progress|Done", message = "must match: To Do, In Progress or Done ")
+    @NotNull
     private String status;
 
 }

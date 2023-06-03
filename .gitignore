@@ -1,6 +1,9 @@
-.idea
-.mvn
 HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+.mvn
+.idea
 mvnw
 mvnw.cmd
-target

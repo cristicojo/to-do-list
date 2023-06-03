@@ -1,5 +1,6 @@
 package todolist.service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import todolist.entity.ToDo;
 import java.util.List;
 
@@ -17,5 +18,5 @@ public interface ToDoService {
 
     void deleteAll();
 
-    ToDo partialUpdate(Integer id, String request);
+    ToDo partialUpdate(Integer id, String requestParam, HttpServletRequest httpServletRequest);
 }

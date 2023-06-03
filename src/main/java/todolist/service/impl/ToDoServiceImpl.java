@@ -1,19 +1,23 @@
 package todolist.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import todolist.entity.ToDo;
 import todolist.repository.ToDoRepository;
 import todolist.service.ToDoService;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class ToDoServiceImpl implements ToDoService {
 
-    @Autowired
     private ToDoRepository repository;
 
 
@@ -25,13 +29,13 @@ public class ToDoServiceImpl implements ToDoService {
 
     @Override
     public ToDo findOne(Integer id) {
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("toDo not found with id: " + id));
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("ToDo not found with id: " + id));
     }
 
 
     @Override
     public ToDo update(ToDo toDoRequest, Integer id) {
-        ToDo newToDo = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("toDo not found with id: " + id));
+        ToDo newToDo = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("ToDo not found with id: " + id));
 
         newToDo.setTitle(toDoRequest.getTitle());
         newToDo.setDueDate(toDoRequest.getDueDate());
@@ -49,7 +53,7 @@ public class ToDoServiceImpl implements ToDoService {
 
     @Override
     public void delete(Integer id) {
-        repository.delete(repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("toDo not found with id: " + id)));
+        repository.delete(repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("ToDo not found with id: " + id)));
     }
 
 
@@ -60,16 +64,18 @@ public class ToDoServiceImpl implements ToDoService {
 
 
     @Override
-    public ToDo partialUpdate(Integer id, String request) {
-        ToDo newToDo = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("toDo not found with id: " + id));
+    public ToDo partialUpdate(Integer id, String requestParam, HttpServletRequest httpServletRequest) {
+        ToDo newToDo = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("ToDo not found with id: " + id));
 
-        switch (request) {
-            case "title" -> newToDo.setTitle(request);
-            case "dueDate" -> newToDo.setDueDate(LocalDateTime.parse(request));
-            case "status" -> newToDo.setStatus(request);
+        var parameterName = httpServletRequest.getParameterNames().nextElement();
+
+        switch (parameterName) {
+            case "title" -> newToDo.setTitle(requestParam);
+            case "dueDate" -> newToDo.setDueDate(LocalDate.parse(requestParam));
+            case "status" -> newToDo.setStatus(requestParam);
+            case "description" -> newToDo.setDescription(requestParam);
         }
 
         return repository.save(newToDo);
     }
-
 }
