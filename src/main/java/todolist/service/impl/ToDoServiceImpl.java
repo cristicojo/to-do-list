@@ -68,7 +68,6 @@ public class ToDoServiceImpl implements ToDoService {
         ToDo newToDo = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("ToDo not found with id: " + id));
 
         var parameterName = httpServletRequest.getParameterNames().nextElement();
-
         switch (parameterName) {
             case "title" -> newToDo.setTitle(requestParam);
             case "dueDate" -> newToDo.setDueDate(LocalDate.parse(requestParam));
