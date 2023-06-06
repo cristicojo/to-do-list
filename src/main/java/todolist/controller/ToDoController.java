@@ -1,7 +1,7 @@
 package todolist.controller;
 
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import todolist.dto.ToDoDto;
@@ -13,30 +13,30 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ToDoController {
 
-    private ToDoService service;
+    private final ToDoService service;
 
 
     @GetMapping("/all")
-    public List<ToDoDto> getAll() {
+    public ResponseEntity<List<ToDoDto>> getAll() {
         return service.findAll();
     }
 
     @GetMapping("/todo/{id}")
-    public ToDoDto getById(@PathVariable("id") Integer id) {
+    public ResponseEntity<ToDoDto> getById(@PathVariable("id") Integer id) {
         return service.findOne(id);
     }
 
     @PostMapping("/todo")
-    public ToDoDto save(@Valid @RequestBody ToDo toDo) {
-        return service.create(toDo);
+    public ResponseEntity<ToDoDto> save(@Valid @RequestBody ToDoDto toDoDto) {
+        return service.create(toDoDto);
     }
 
     @PutMapping("/todo/{id}")
-    public ToDoDto update(@PathVariable("id") Integer id, @Valid @RequestBody ToDo toDo) {
-        return service.update(toDo, id);
+    public ResponseEntity<ToDoDto> update(@PathVariable("id") Integer id, @Valid @RequestBody ToDoDto toDoDto) {
+        return service.update(toDoDto, id);
     }
 
     @DeleteMapping("/todo/{id}")
@@ -46,13 +46,13 @@ public class ToDoController {
     }
 
     @DeleteMapping("/all")
-    public void deleteAll() {
-        service.deleteAll();
+    public ResponseEntity<Map<String, Object>> deleteAll() {
+        return service.deleteAll();
     }
 
 
     @PatchMapping("/todo/{id}")
-    public ToDoDto updateStatus(@PathVariable Integer id, @RequestBody Map<String, Object> changes) {
+    public ResponseEntity<ToDoDto> partialUpdate(@PathVariable Integer id, @RequestBody Map<String, Object> changes) {
         return service.partialUpdate(id, changes);
     }
 

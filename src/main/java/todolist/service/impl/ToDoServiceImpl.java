@@ -1,6 +1,6 @@
 package todolist.service.impl;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -18,43 +18,49 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ToDoServiceImpl implements ToDoService {
 
-    private ToDoRepository repository;
-    private ModelMapper modelMapper;
+    private final ToDoRepository repository;
+    private final ModelMapper modelMapper;
 
 
     @Override
-    public List<ToDoDto> findAll() {
-        return repository.findAll().stream()
+    public ResponseEntity<List<ToDoDto>> findAll() {
+        var list = repository.findAll().stream()
                 .map(toDo -> modelMapper.map(toDo, ToDoDto.class))
                 .collect(Collectors.toList());
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
 
     @Override
-    public ToDoDto findOne(Integer id) {
-        return modelMapper.map(repository.findById(id).orElseThrow(() ->
+    public ResponseEntity<ToDoDto> findOne(Integer id) {
+        var toDoDto = modelMapper.map(repository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("ToDo not found with id: " + id)), ToDoDto.class);
+
+        return new ResponseEntity<>(toDoDto, HttpStatus.OK);
     }
 
 
     @Override
-    public ToDoDto update(ToDo toDoRequest, Integer id) {
+    public ResponseEntity<ToDoDto> update(ToDoDto toDoDto, Integer id) {
         ToDo newToDo = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("ToDo not found with id: " + id));
+        var toDoRequest = modelMapper.map(toDoDto, ToDo.class);
 
         newToDo.setTitle(toDoRequest.getTitle());
         newToDo.setDueDate(toDoRequest.getDueDate());
         newToDo.setStatus(toDoRequest.getStatus());
 
-        return modelMapper.map(repository.save(newToDo), ToDoDto.class);
+        return new ResponseEntity<>(modelMapper.map(repository.save(newToDo), ToDoDto.class), HttpStatus.OK);
     }
 
 
     @Override
-    public ToDoDto create(ToDo toDoRequest) {
-        return modelMapper.map(repository.save(toDoRequest), ToDoDto.class);
+    public ResponseEntity<ToDoDto> create(ToDoDto toDoDto) {
+        return new ResponseEntity<>(modelMapper.map(repository.save(modelMapper.map(toDoDto, ToDo.class)),
+                ToDoDto.class), HttpStatus.CREATED);
     }
 
 
@@ -70,13 +76,16 @@ public class ToDoServiceImpl implements ToDoService {
 
 
     @Override
-    public void deleteAll() {
+    public ResponseEntity<Map<String, Object>> deleteAll() {
         repository.deleteAll();
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("message", "All ToDos deleted successfully");
+        return new ResponseEntity<>(body, HttpStatus.OK);
     }
 
 
     @Override
-    public ToDoDto partialUpdate(Integer id, Map<String, Object> changes) {
+    public ResponseEntity<ToDoDto> partialUpdate(Integer id, Map<String, Object> changes) {
         ToDo newToDo = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("ToDo not found with id: " + id));
 
         changes.forEach((change, value) -> {
@@ -88,6 +97,6 @@ public class ToDoServiceImpl implements ToDoService {
             }
         });
 
-        return modelMapper.map(repository.save(newToDo), ToDoDto.class);
+        return new ResponseEntity<>(modelMapper.map(repository.save(newToDo), ToDoDto.class), HttpStatus.OK);
     }
 }

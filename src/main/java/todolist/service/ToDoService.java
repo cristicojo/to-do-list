@@ -9,17 +9,17 @@ import java.util.Map;
 
 public interface ToDoService {
 
-    List<ToDoDto> findAll();
+    ResponseEntity<List<ToDoDto>> findAll();
 
-    ToDoDto findOne(Integer id);
+    ResponseEntity<ToDoDto> findOne(Integer id);
 
-    ToDoDto update(ToDo toDoRequest, Integer id);
+    ResponseEntity<ToDoDto> update(ToDoDto toDoDto, Integer id);
 
-    ToDoDto create(ToDo toDoRequest);
+    ResponseEntity<ToDoDto> create(ToDoDto toDoDto);
 
     ResponseEntity<Map<String, Object>> delete(Integer id);
 
-    void deleteAll();
+    ResponseEntity<Map<String, Object>> deleteAll();
 
-    ToDoDto partialUpdate(Integer id, Map<String, Object> changes);
+    ResponseEntity<ToDoDto> partialUpdate(Integer id, Map<String, Object> changes);
 }
