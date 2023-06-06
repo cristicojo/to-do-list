@@ -23,19 +23,15 @@ public class ToDo {
 
 
     @Column(name="Title")
-    @NotNull
     private String title;
 
     @Column(name="Description")
     private String description;
 
     @Column(name="Due_date")
-    @NotNull
     private LocalDate dueDate;
 
     @Column(name="Status")
-    @Pattern(regexp = "To Do|In Progress|Done", message = "must match: To Do, In Progress or Done ")
-    @NotNull
     private String status;
 
 }

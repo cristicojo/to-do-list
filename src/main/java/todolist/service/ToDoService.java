@@ -1,23 +1,25 @@
 package todolist.service;
 
-import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.ResponseEntity;
+import todolist.dto.ToDoDto;
 import todolist.entity.ToDo;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ToDoService {
 
-    List<ToDo> findAll();
+    List<ToDoDto> findAll();
 
-    ToDo findOne(Integer id);
+    ToDoDto findOne(Integer id);
 
-    ToDo update(ToDo toDoRequest, Integer id);
+    ToDoDto update(ToDo toDoRequest, Integer id);
 
-    ToDo create(ToDo toDoRequest);
+    ToDoDto create(ToDo toDoRequest);
 
-    void delete(Integer id);
+    ResponseEntity<Map<String, Object>> delete(Integer id);
 
     void deleteAll();
 
-    ToDo partialUpdate(Integer id, String requestParam, HttpServletRequest httpServletRequest);
+    ToDoDto partialUpdate(Integer id, Map<String, Object> changes);
 }
