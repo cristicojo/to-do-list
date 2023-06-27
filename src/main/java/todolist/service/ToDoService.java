@@ -2,7 +2,6 @@ package todolist.service;
 
 import org.springframework.http.ResponseEntity;
 import todolist.dto.ToDoDto;
-import todolist.entity.ToDo;
 
 import java.util.List;
 import java.util.Map;
