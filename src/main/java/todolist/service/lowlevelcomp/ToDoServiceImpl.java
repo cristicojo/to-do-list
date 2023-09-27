@@ -1,25 +1,24 @@
-package todolist.service.impl;
+package todolist.service.lowlevelcomp;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import todolist.dto.ToDoDto;
 import todolist.entity.ToDo;
 import todolist.repository.ToDoRepository;
-import todolist.service.ToDoService;
+import todolist.service.highlevelcomp.IToDoService;
 
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-@Service
+@Component
 @RequiredArgsConstructor
-public class ToDoServiceImpl implements ToDoService {
+public class ToDoServiceImpl implements IToDoService {
 
     private final ToDoRepository repository;
     private final ModelMapper modelMapper;

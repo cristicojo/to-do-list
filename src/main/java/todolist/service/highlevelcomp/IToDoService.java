@@ -1,4 +1,4 @@
-package todolist.service;
+package todolist.service.highlevelcomp;
 
 import org.springframework.http.ResponseEntity;
 import todolist.dto.ToDoDto;
@@ -7,7 +7,7 @@ import todolist.entity.ToDo;
 import java.util.List;
 import java.util.Map;
 
-public interface ToDoService {
+public interface IToDoService {
 
     ResponseEntity<List<ToDoDto>> findAll();
 

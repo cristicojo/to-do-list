@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import todolist.dto.ToDoDto;
 import todolist.entity.ToDo;
-import todolist.service.ToDoService;
+import todolist.service.highlevelcomp.ToDoService;
 
 import java.util.List;
 import java.util.Map;
