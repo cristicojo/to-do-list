@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import todolist.dto.ToDoDto;
 import todolist.entity.ToDo;
+import todolist.exception.BadRequestException;
 import todolist.repository.ToDoRepository;
 import todolist.service.highlevelcomp.IToDoService;
 
@@ -93,6 +94,7 @@ public class ToDoServiceImpl implements IToDoService {
                 case "dueDate" -> newToDo.setDueDate((LocalDate) value);
                 case "status" -> newToDo.setStatus((String) value);
                 case "description" -> newToDo.setDescription((String) value);
+                default -> throw new BadRequestException("Request is not valid");
             }
         });
 
